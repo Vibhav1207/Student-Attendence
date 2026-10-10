@@ -72,40 +72,14 @@ if "JWT_SECRET" not in os.environ:
 # APP
 # =========================================
 
-app = FastAPI(
-    title="CSE Duty Leave & Attendance API",
-    docs_url="/api/docs",
-    openapi_url="/api/openapi.json",
-    redirect_slashes=False,
-)
-
-configured_origins = [o.strip() for o in CLIENT_URL.split(",") if o.strip()]
-if "*" in configured_origins:
-    allow_origins = ["*"]
-else:
-    allow_origins = list(set(configured_origins + ["http://localhost:5173", "http://localhost:3000"]))
-
+app = FastAPI(title="CSE Duty Leave & Attendance API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allow_origins,
-    allow_origin_regex=r"https://.*\.vercel\.app",
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    # CLIENT_URL may list several sites, separated by commas (e.g. the Vercel address)
+    allow_origins=[u.strip().rstrip("/") for u in CLIENT_URL.split(",") if u.strip()],
+    allow_methods=["*"], allow_headers=["*"]
 )
 init_db()
-
-
-@app.get("/")
-@app.get("/api")
-@app.get("/api/health")
-def api_health():
-    return {
-        "status": "ok",
-        "service": "Attendance Portal API",
-        "version": "1.0.0",
-        "timestamp": now_iso(),
-    }
 
 
 class ApiError(HTTPException):
@@ -537,7 +511,6 @@ def academic(user=Depends(current_user)):
 # =========================================
 
 
-@app.post("/api/applications/preview")
 
 def notify(conn, user_id: str, title: str, body: str, kind: str, application_id: str | None = None):
     conn.execute(
@@ -561,6 +534,7 @@ def notify_faculty_new_app(conn, class_id: str, student_name: str, event_name: s
         notify(conn, row["id"], title, f"{student_name}: {event_name}.", kind, app_id)
 
 
+@app.post("/api/applications/preview")
 def preview(body: dict = Body(default_factory=dict), user=Depends(require_role("student"))):
     start_date, end_date = body.get("startDate"), body.get("endDate")
     result = validate_dates(user["class_id"], start_date, end_date)
@@ -2047,6 +2021,34 @@ async def upload_certificate(
         return {"application": application_json(get_application(conn, application_id), conn)}
 
 
+# =========================================
+# FRONTEND (built React app), so one service serves both the site and the API
+# =========================================
+
+# In the repo the React app sits next to the server folder: npm run build -> ../dist
+FRONTEND_DIST = Path(os.getenv("FRONTEND_DIST", Path(__file__).resolve().parent.parent / "dist")).resolve()
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+def frontend(full_path: str):
+    if full_path.startswith("api/") or full_path == "api":
+        raise HTTPException(status_code=404)
+    index = FRONTEND_DIST / "index.html"
+    if not index.exists():
+        return JSONResponse(
+            {"error": "Frontend not built. Run 'npm run build' in the project folder, then restart."},
+            status_code=503,
+        )
+    target = (FRONTEND_DIST / full_path).resolve()
+    if full_path and target.is_file() and FRONTEND_DIST in target.parents:
+        # Built files have content hashes in their names, so they can be cached for a long time.
+        cache = "public, max-age=31536000, immutable" if "/assets/" in f"/{full_path}" else "no-cache"
+        return FileResponse(target, headers={"Cache-Control": cache})
+    # Anything else is a page of the single-page app.
+    return FileResponse(index, headers={"Cache-Control": "no-cache"})
+
+
 if __name__ == "__main__":
-    print(f"API running on http://localhost:{PORT}  (docs: http://localhost:{PORT}/docs)")
-    uvicorn.run("main:app", host="127.0.0.1", port=PORT, reload=False)
+    host = os.getenv("HOST", "127.0.0.1")
+    print(f"AttendEase running on http://localhost:{PORT}  (API docs: http://localhost:{PORT}/docs)")
+    uvicorn.run("main:app", host=host, port=PORT, reload=False)

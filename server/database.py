@@ -4,51 +4,15 @@ SQLite database (built into Python, nothing to install).
 The file is created automatically at server/data/attendance.db.
 """
 
-import os
-import shutil
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
 
-DEFAULT_DATA_DIR = Path(__file__).parent / "data"
-
-IS_SERVERLESS = bool(
-    os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME") or os.getenv("SERVERLESS")
-)
-
-if IS_SERVERLESS or os.getenv("USE_TMP_STORAGE"):
-    DATA_DIR = Path("/tmp") / "attendance_data"
-else:
-    DATA_DIR = Path(os.getenv("DATA_DIR", str(DEFAULT_DATA_DIR)))
-
+DATA_DIR = Path(__file__).parent / "data"
 UPLOAD_DIR = DATA_DIR / "uploads"
-DB_PATH = Path(os.getenv("DB_PATH", str(DATA_DIR / "attendance.db")))
+DB_PATH = DATA_DIR / "attendance.db"
 
-
-def ensure_storage():
-    global DATA_DIR, UPLOAD_DIR, DB_PATH
-    try:
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
-        UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-        test_file = DATA_DIR / ".write_test"
-        test_file.touch()
-        test_file.unlink()
-    except (OSError, PermissionError):
-        DATA_DIR = Path("/tmp") / "attendance_data"
-        UPLOAD_DIR = DATA_DIR / "uploads"
-        DB_PATH = DATA_DIR / "attendance.db"
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
-        UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-
-    bundled_db = DEFAULT_DATA_DIR / "attendance.db"
-    if bundled_db.exists() and not DB_PATH.exists():
-        try:
-            shutil.copy2(bundled_db, DB_PATH)
-        except Exception:
-            pass
-
-
-ensure_storage()
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS classes (
@@ -191,7 +155,6 @@ CREATE INDEX IF NOT EXISTS idx_apps_class ON applications(class_id);
 @contextmanager
 def get_db():
     """Opens a connection, commits if everything worked, rolls back on error."""
-    ensure_storage()
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")

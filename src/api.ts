@@ -17,10 +17,21 @@ import type {
 
 const TOKEN_KEY = "attendance_portal_token";
 
+/**
+ * The login is kept per browser tab (sessionStorage), so a student and a coordinator can be
+ * logged in side by side in two tabs without one login replacing the other.
+ * It survives a page refresh; closing the tab logs out.
+ */
 export const tokenStore = {
-  get: () => localStorage.getItem(TOKEN_KEY),
-  set: (token: string) => localStorage.setItem(TOKEN_KEY, token),
-  clear: () => localStorage.removeItem(TOKEN_KEY),
+  get: () => sessionStorage.getItem(TOKEN_KEY),
+  set: (token: string) => {
+    sessionStorage.setItem(TOKEN_KEY, token);
+    localStorage.removeItem(TOKEN_KEY); // clean up the old shared login from earlier versions
+  },
+  clear: () => {
+    sessionStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+  },
 };
 
 export class ApiError extends Error {
@@ -37,8 +48,6 @@ type RequestOptions = {
   body?: unknown;
 };
 
-const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
-
 async function send(path: string, options: RequestOptions = {}): Promise<Response> {
   const token = tokenStore.get();
   const headers: Record<string, string> = {};
@@ -52,13 +61,9 @@ async function send(path: string, options: RequestOptions = {}): Promise<Respons
   }
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const url = path.startsWith("http")
-    ? path
-    : `${API_BASE}${path.startsWith("/") ? "" : "/"}${path}`;
-
   let response: Response;
   try {
-    response = await fetch(url, { method: options.method ?? "GET", headers, body });
+    response = await fetch(path, { method: options.method ?? "GET", headers, body });
   } catch {
     throw new ApiError(0, "Can't reach the server. Make sure the backend is running.");
   }

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import type { SubmitEvent } from "react";
-import { AlertCircle, Eye, EyeOff, FileCheck } from "lucide-react";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { api } from "../api";
 import type { AuthResponse, ClassInfo } from "../types";
+import universityLogo from "../assets/sanjivani-university-logo.png";
 import "../styles/Auth.css";
 
 type Mode = "login" | "signup";
@@ -19,37 +20,12 @@ const AuthPage = ({ onAuthenticated }: AuthPageProps) => {
   return (
     <div className="auth-page">
       <aside className="auth-panel">
-        <div className="auth-brand">
-          <div className="brand-logo">
-            <FileCheck size={21} />
+        <div className="auth-panel-center">
+          <div className="auth-logo-card">
+            <img src={universityLogo} alt="Sanjivani University" />
           </div>
-          <div>
-            <strong>Sanjivani University</strong>
-            <span>Department of Computer Science & Engineering</span>
-          </div>
-        </div>
-
-        <div className="auth-panel-body">
-          <h1>Event attendance, without the paperwork.</h1>
-          <p>
-            Missed lectures for a hackathon, sports or cultural event? Apply here instead of on
-            paper. The lectures you missed come straight from your time table.
-          </p>
-
-          <ol className="auth-steps">
-            <li>
-              <strong>Enter your ERP attendance</strong>
-              <span>Attended and total sessions per subject</span>
-            </li>
-            <li>
-              <strong>Apply with your documents</strong>
-              <span>Pre-approval letter and certificate</span>
-            </li>
-            <li>
-              <strong>Coordinator verifies</strong>
-              <span>Final attendance as per the Registrar's circular</span>
-            </li>
-          </ol>
+          <h1 className="auth-product">Sanjivani Attendance Tracker</h1>
+          <p className="auth-dept">Department of Computer Science &amp; Engineering</p>
         </div>
       </aside>
 
@@ -158,7 +134,7 @@ function FacultySignupForm({ onAuthenticated, onSwitch }: { onAuthenticated: (r:
     api
       .classes()
       .then((d) => setClasses(d.classes))
-      .catch((err: Error) => setError(err.message));
+      .catch((err: Error) => setError(`Couldn't load the class list. ${err.message}`));
   }, []);
 
   const toggle = (id: string) => setSelected([id]);   // single class (dropdown)

@@ -1,0 +1,340 @@
+{
+  "class": "BTECH",
+  "wef": "2026-06-15",
+  "slotTimes": {
+    "1": [
+      "10:00",
+      "10:55"
+    ],
+    "2": [
+      "10:55",
+      "11:50"
+    ],
+    "3": [
+      "12:30",
+      "13:30"
+    ],
+    "4": [
+      "13:30",
+      "14:30"
+    ],
+    "5": [
+      "14:50",
+      "15:50"
+    ],
+    "6": [
+      "15:50",
+      "16:50"
+    ]
+  },
+  "courses": [
+    {
+      "id": "RM",
+      "code": "24UCSMD401",
+      "name": "Research Methodology",
+      "faculty": "Dr. Arvind Mukundan",
+      "counted": true
+    },
+    {
+      "id": "AISD",
+      "code": "24UCSPC401",
+      "name": "AI for Sustainable Development",
+      "faculty": "Dr. Arindam Chaudhari",
+      "counted": true
+    },
+    {
+      "id": "QC",
+      "code": "24UCSPC408A",
+      "name": "Quantum Cryptography",
+      "faculty": "Dr. Patlolla Venkat Reddy",
+      "counted": true
+    },
+    {
+      "id": "RAG",
+      "code": "24UCSPE406A",
+      "name": "Retrieval Augmented Generation",
+      "faculty": "Dr. M.B. Gawali",
+      "counted": true
+    },
+    {
+      "id": "DDBMS",
+      "code": "24UCSPE407A",
+      "name": "Distributed Database Management Systems",
+      "faculty": "Mr. Anuj Joshi",
+      "counted": true
+    },
+    {
+      "id": "PW",
+      "code": "24UCSPW401",
+      "name": "Internship / Project Idea Phase-1",
+      "faculty": "Ms. Jyotimoyee Kalita",
+      "counted": true
+    },
+    {
+      "id": "Mentor Mentee",
+      "name": "Mentor Mentee",
+      "counted": false
+    },
+    {
+      "id": "LinkedIn",
+      "name": "LinkedIn",
+      "counted": false
+    },
+    {
+      "id": "Training & Placement",
+      "name": "Training & Placement",
+      "counted": false
+    }
+  ],
+  "blocks": [
+    {
+      "day": "MON",
+      "slots": [
+        1
+      ],
+      "course": "RAG",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "MON",
+      "slots": [
+        2
+      ],
+      "course": "RM",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "MON",
+      "slots": [
+        3
+      ],
+      "course": "RAG",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "MON",
+      "slots": [
+        4
+      ],
+      "course": "Mentor Mentee",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "MON",
+      "slots": [
+        5,
+        6
+      ],
+      "course": "PW",
+      "type": "LAB",
+      "room": "306"
+    },
+    {
+      "day": "TUE",
+      "slots": [
+        1
+      ],
+      "course": "QC",
+      "type": "TH",
+      "room": "306"
+    },
+    {
+      "day": "TUE",
+      "slots": [
+        2
+      ],
+      "course": "RM",
+      "type": "TH",
+      "room": "306"
+    },
+    {
+      "day": "TUE",
+      "slots": [
+        3
+      ],
+      "course": "DDBMS",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "TUE",
+      "slots": [
+        4
+      ],
+      "course": "LinkedIn",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "TUE",
+      "slots": [
+        5,
+        6
+      ],
+      "course": "AISD",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "WED",
+      "slots": [
+        1,
+        2
+      ],
+      "course": "PW",
+      "type": "LAB",
+      "room": "103"
+    },
+    {
+      "day": "WED",
+      "slots": [
+        3
+      ],
+      "course": "AISD",
+      "type": "TH",
+      "room": "306"
+    },
+    {
+      "day": "WED",
+      "slots": [
+        4
+      ],
+      "course": "QC",
+      "type": "TH",
+      "room": "306"
+    },
+    {
+      "day": "WED",
+      "slots": [
+        5,
+        6
+      ],
+      "course": "PW",
+      "type": "LAB",
+      "room": "103"
+    },
+    {
+      "day": "THU",
+      "slots": [
+        1
+      ],
+      "course": "DDBMS",
+      "type": "TH",
+      "room": "306"
+    },
+    {
+      "day": "THU",
+      "slots": [
+        2
+      ],
+      "course": "RAG",
+      "type": "TH",
+      "room": "306"
+    },
+    {
+      "day": "THU",
+      "slots": [
+        3
+      ],
+      "course": "RM",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "THU",
+      "slots": [
+        4
+      ],
+      "course": "AISD",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "THU",
+      "slots": [
+        5,
+        6
+      ],
+      "course": "Training & Placement",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "FRI",
+      "slots": [
+        1
+      ],
+      "course": "QC",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "FRI",
+      "slots": [
+        2
+      ],
+      "course": "DDBMS",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "FRI",
+      "slots": [
+        3,
+        4
+      ],
+      "course": "PW",
+      "type": "LAB",
+      "room": "103"
+    },
+    {
+      "day": "FRI",
+      "slots": [
+        5,
+        6
+      ],
+      "course": "AISD",
+      "type": "TH",
+      "room": "103"
+    },
+    {
+      "day": "SAT",
+      "slots": [
+        1,
+        2
+      ],
+      "course": "PW",
+      "type": "LAB",
+      "room": "103"
+    },
+    {
+      "day": "SAT",
+      "slots": [
+        3,
+        4
+      ],
+      "course": "PW",
+      "type": "LAB",
+      "room": "103"
+    },
+    {
+      "day": "SAT",
+      "slots": [
+        5,
+        6
+      ],
+      "course": "PW",
+      "type": "LAB",
+      "room": "103"
+    }
+  ],
+  "notes": [
+    "Final Year (IV / VII), class in charge Ms. Jyotimoyee Kalita. Room 103 unless noted (306 on Mon 5-6, Tue 1-2, Wed 3-4, Thu 1-2).",
+    "Internship / Project runs in two-period practical blocks; each block counts as one session, like a lab.",
+    "AI for Sustainable Development on Tue and Fri periods 5-6 is a two-period theory block, so it counts as two lectures."
+  ]
+}
