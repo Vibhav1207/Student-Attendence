@@ -89,6 +89,13 @@ async function send(path: string, options: RequestOptions = {}): Promise<Respons
 
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const response = await send(path, options);
+  const contentType = response.headers.get("content-type") ?? "";
+  if (contentType && !contentType.includes("application/json")) {
+    throw new ApiError(
+      response.status,
+      "Received HTML instead of JSON. The backend route was not found."
+    );
+  }
   return (await response.json()) as T;
 }
 
