@@ -5,8 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js"
+    "start": "venv\\Scripts\\python.exe main.py",
+    "dev": "venv\\Scripts\\python.exe main.py"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

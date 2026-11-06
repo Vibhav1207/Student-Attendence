@@ -48,6 +48,10 @@ type RequestOptions = {
   body?: unknown;
 };
 
+const BASE_URL = import.meta.env.VITE_API_URL
+  ? String(import.meta.env.VITE_API_URL).replace(/\/+$/, "")
+  : "";
+
 async function send(path: string, options: RequestOptions = {}): Promise<Response> {
   const token = tokenStore.get();
   const headers: Record<string, string> = {};
@@ -63,7 +67,8 @@ async function send(path: string, options: RequestOptions = {}): Promise<Respons
 
   let response: Response;
   try {
-    response = await fetch(path, { method: options.method ?? "GET", headers, body });
+    const url = path.startsWith("http") ? path : `${BASE_URL}${path}`;
+    response = await fetch(url, { method: options.method ?? "GET", headers, body });
   } catch {
     throw new ApiError(0, "Can't reach the server. Make sure the backend is running.");
   }
@@ -76,7 +81,7 @@ async function send(path: string, options: RequestOptions = {}): Promise<Respons
       message ??
         (response.status >= 500
           ? "The server isn't responding. Make sure the backend is running."
-          : "Something went wrong.")
+          : response.status === 404 ? "API route not found (404). Make sure the Python backend (server/main.py) is running on port 5000." : `Request failed (status ${response.status}).`)
     );
   }
   return response;
